@@ -18,18 +18,19 @@ class SocketServer(object):
         # Создать сокет, выделить его в отдельный поток
         # Настроить общение с сокетом
 
+        fake_sock = socket.socket()
+        fake_sock.connect(("gmail.com", 80))
+        host = fake_sock.getsockname()
+        print 'host: ' + ':'.join(map(str, host))
+        fake_sock.close()
         self.socket = socket.socket()
-        self.host = '127.0.0.1'
-        self.socket.connect(("gmail.com", 80))
-        self.host = self.socket.getsockname()
-        print self.host
-        self.socket.bind(self.host)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.socket.bind(host)
         self.socket.listen(1)
 
-        print 'host: ' + ':'.join(map(str, self.host))
-
         conn, addr = self.socket.accept()
-
+        conn.close()
+        self.socket.close()
         print addr
 
     def send_message(self):
