@@ -18,8 +18,8 @@ class Server(asyncore.dispatcher):
     class RequestHandler(asyncore.dispatcher_with_send):
 
         def __init__(self, conn, proc_class):
+            asyncore.dispatcher_with_send.__init__(self, conn)
             self.proc_class = proc_class
-            super(Server.RequestHandler, self).__init__(conn)
 
         def handle_close(self):
             self.close()
@@ -29,7 +29,10 @@ class Server(asyncore.dispatcher):
             if data:
                 try:
                     data = json.loads(data)
-                    getattr(self.proc_class, data['type'])(*data['data'])
+                    responce = getattr(self.proc_class, data['type'])(*data['data'])
+
+                    self.send(json.dumps(responce))
+
                 except Exception:
                     pass
 
