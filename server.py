@@ -17,20 +17,8 @@ class SocketServer(object):
 
         # Создать сокет, выделить его в отдельный поток
         # Настроить общение с сокетом
+        pass
 
-        self.socket = socket.socket()
-        self.host = '127.0.0.1'
-        self.socket.connect(("gmail.com", 80))
-        self.host = self.socket.getsockname()
-        print self.host
-        self.socket.bind(self.host)
-        self.socket.listen(1)
-
-        print 'host: ' + ':'.join(map(str, self.host))
-
-        conn, addr = self.socket.accept()
-
-        print addr
 
     def send_message(self):
         # Отправить сообщение
@@ -45,7 +33,23 @@ class SocketServer(object):
         pass
 
 
-s = SocketServer()
+# Определить IP
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(('gmail.com', 80))
+ip = s.getsockname()[0]
+s.close()
+
+# TCP сервер
+import SocketServer
+
+
+class MyServer(SocketServer.BaseRequestHandler):
+    def handle(self):
+        print self.request.recv(1024).strip()
+
+
+sever = SocketServer.TCPServer((ip, 9000), MyServer)
+sever.serve_forever()
 
 """
 from threading import Thread
