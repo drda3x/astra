@@ -8,6 +8,7 @@ u"""
 import asyncore
 import os
 from server import Server
+import subprocess
 
 
 class Manager(object):
@@ -24,13 +25,13 @@ class Manager(object):
         u"""Вернуть список имеющихся файлов"""
         return os.listdir(self.folder)
 
-    def run_video(self, file_path):
+    def run_video(self, file_name):
         u""" Запустить проигрывание"""
-        pass
+        subprocess.Popen(['vlc', self.folder + file_name])
 
     def pause(self):
         u""" Поставить видео на паузу """
-        pass
+        subprocess.call(['xdotool getactivewindow key "space"'])
 
 
 class AstraApp(object):

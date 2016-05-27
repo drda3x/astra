@@ -29,12 +29,16 @@ class Server(asyncore.dispatcher):
             if data:
                 try:
                     data = json.loads(data)
-                    responce = getattr(self.proc_class, data['type'])(*data['data'])
+                    kwargs = data.get('data', {})
+                    request = data.get('type')
 
-                    self.send(json.dumps(responce))
+                    if request:
+                        responce = getattr(self.proc_class, request)(**kwargs)
+                        self.send(json.dumps(responce))
 
                 except Exception:
-                    pass
+                    from traceback import format_exc
+                    print format_exc()
 
     def __init__(self, proc_class=None):
 
@@ -55,4 +59,5 @@ class Server(asyncore.dispatcher):
 
     def handle_accept(self):
         conn, addr = self.accept()
+        print conn, addr
         self.RequestHandler(conn, self.proc_class)
