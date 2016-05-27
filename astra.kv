@@ -1,0 +1,17 @@
+<LoginLayout>:
+    orientation: 'vertical'
+    height: 500
+    Label:
+        text: '     Введите код с\nэкрана компьютера'
+        valign: 'middle'
+        color: map(lambda x: x/255.0, (0, 107, 141)) + [1]
+    TextInput:
+        id: label
+        font_size: 25
+        height: 10
+        background_color: map(lambda x: x/255.0, (254, 247, 219)) + [1]
+    Button:
+        text: 'соединить'
+        on_press: print label.text
+        background_normal: 'btn_color.png'
+        background_down: 'pressed_btn_color.png'
