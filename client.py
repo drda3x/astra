@@ -13,7 +13,7 @@ class LoginScreen(Screen):
     pass
 
 
-class ChoiceScreen(Screen):
+class ChoiseScreen(Screen):
     pass
 
 
@@ -22,7 +22,12 @@ class ScreenManager(ScreenManagerOrigin):
 
 
 root_widget = Builder.load_string('''
-FloatLayout:
+ScreenManager:
+    LoginScreen:
+    ChoiseScreen:
+
+<LoginScreen>:
+    name: 'login_screen'
     Image:
         source: 'fon.png'
         allow_stretch: True
@@ -45,6 +50,16 @@ FloatLayout:
             id: inp
         Button:
             text: 'Подключиться'
+            on_release: app.root.current = 'choise_screen'
+
+<ChoiseScreen>:
+    name: 'choise_screen'
+    Image:
+        source: 'fon.png'
+        allow_stretch: True
+        keep_ratio: False
+    Label:
+        text: 'Привет, это второй экран'
 ''')
 
 
