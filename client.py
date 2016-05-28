@@ -1,24 +1,59 @@
 #!/ust/bin/python
 # -*- coding: utf-8 -*-
 
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.core.window import Window
-from kivy.properties import ListProperty
+from kivy.app import App as KivyAppClass
+from kivy.uix.widget import Widget
+from kivy.uix.floatlayout import FloatLayout
+from kivy.lang import Builder
 
-def get_color(*rgb):
-    return map(lambda x: x/255.0, rgb)
+from kivy.uix.screenmanager import Screen, ScreenManager as ScreenManagerOrigin
 
 
-class LoginLayout(BoxLayout):
+class LoginScreen(Screen):
     pass
 
-class AstraApp(App):
+
+class ChoiceScreen(Screen):
+    pass
+
+
+class ScreenManager(ScreenManagerOrigin):
+    pass
+
+
+root_widget = Builder.load_string('''
+FloatLayout:
+    Image:
+        source: 'fon.png'
+        allow_stretch: True
+        keep_ratio: False
+    BoxLayout:
+        id: container
+        orientation: 'vertical'
+        size_hint: 0.5, 0.3
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: 'Введите код с экрана компьютера'
+            color: [0,0,0,1]
+        TextInput:
+            height: 100
+            text: '18-116'
+            # Нужно будет найти соотношение размера шрифта при изменении
+            # размеров окна
+            padding_x: [(container.width / 2) - len(self.text) * 14, 0]
+            font_size: 50
+            id: inp
+        Button:
+            text: 'Подключиться'
+''')
+
+
+class App(KivyAppClass):
 
     def build(self):
-        Window.clearcolor = get_color(254, 247, 219) + [1]
-        return LoginLayout()
+        return root_widget
 
 
 if __name__ == '__main__':
-    AstraApp().run()
+    App().run()
+
